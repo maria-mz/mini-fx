@@ -1,25 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 #include "ffmpeg.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
+#include "image.h"
 
 void create_video_from_img(char *image_path, char *video_name, int seconds)
 {
-    int w, h, ch;
-    unsigned char *img = stbi_load(image_path, &w, &h, &ch, 3);
+    Image *image = load_image(image_path);
 
-    if (img == NULL) {
+    if (image == NULL) {
         printf("failed to load image\n");
         exit(1);
     }
 
     FFMPEGWriteParams params = {
-        w,
-        h,
+        image->width,
+        image->height,
         "1",
         "yuv420p",
         "libx264",
@@ -29,15 +26,16 @@ void create_video_from_img(char *image_path, char *video_name, int seconds)
     FFMPEGProcess *ffmpeg = open_ffmpeg_write_pipe(&params);
 
     if (ffmpeg == NULL) {
-        printf("something went wrong...");
+        printf("something went wrong...\n");
         exit(1);
     };
 
     for (int i = 0; i < seconds; ++i) {
-        write(ffmpeg->pipe, img, w*h*ch*sizeof(unsigned char));
+        write(ffmpeg->pipe, image->data, image->size);
     }
 
     close(ffmpeg->pipe);
+    unload_image(image);
 }
 
 int main(int argc, char *argv[])
