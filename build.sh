@@ -4,4 +4,4 @@ set -xe
 
 CFLAGS="-Wall -Wextra"
 
-clang $CFLAGS -o mini-fx main.c
+clang $CFLAGS -o mini-fx main.c ffmpeg.c
