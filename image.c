@@ -27,7 +27,7 @@ Image *load_image(char *image_path) {
         return NULL;
     }
 
-    image->size = image->width *image->height * image->channels * sizeof(unsigned char);
+    image->nb_bytes = image->width *image->height * image->channels * sizeof(unsigned char);
 
     return image;
 }

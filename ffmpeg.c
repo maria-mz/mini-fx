@@ -36,12 +36,6 @@ FFMPEGProcess *open_ffmpeg_write_pipe(FFMPEGWriteParams *params) {
 
         char size[32];
         snprintf(size, sizeof(size), "%dx%d", params->width, params->height);
-        
-        printf("params->fps: %s\n", params->fps);
-        printf("params->video_encoder: %s\n", params->video_encoder);
-        printf("params->pix_fmt: %s\n", params->pix_fmt);
-        printf("params->video_name: %s\n", params->video_name);
-        printf("size: %s\n", size);
 
         int ret = execlp(
             "ffmpeg",
