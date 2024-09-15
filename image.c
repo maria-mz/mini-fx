@@ -3,6 +3,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 #include "image.h"
 
 Image *load_image(char *image_path) {
@@ -45,6 +48,18 @@ void copy_image_structure(Image *image_from, Image* image_to)
                         * image_from->channels
                         * sizeof(unsigned char);
     image_to->data = (unsigned char*)malloc(image_from->nb_bytes);
+}
+
+void save_image(Image *image, char *output_path)
+{
+    stbi_write_png(
+        output_path,
+        image->width,
+        image->height,
+        image->channels,
+        image->data,
+        image->width * image->channels
+    );
 }
 
 void unload_image(Image *image) {
