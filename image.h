@@ -12,6 +12,7 @@ typedef struct Image {
 } Image;
 
 Image *load_image(char *image_path);
+void copy_image_structure(Image *image_from, Image* image_to);
 void unload_image(Image *image);
 
 #endif

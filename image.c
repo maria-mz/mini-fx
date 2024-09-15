@@ -27,9 +27,24 @@ Image *load_image(char *image_path) {
         return NULL;
     }
 
-    image->nb_bytes = image->width *image->height * image->channels * sizeof(unsigned char);
+    image->nb_bytes = image->width
+                    * image->height
+                    * image->channels
+                    * sizeof(unsigned char);
 
     return image;
+}
+
+void copy_image_structure(Image *image_from, Image* image_to)
+{
+    image_to->width = image_from->width;
+    image_to->height = image_from->height;
+    image_to->channels = image_from->channels;
+    image_to->nb_bytes = image_from->width
+                        * image_from->height
+                        * image_from->channels
+                        * sizeof(unsigned char);
+    image_to->data = (unsigned char*)malloc(image_from->nb_bytes);
 }
 
 void unload_image(Image *image) {

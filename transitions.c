@@ -9,40 +9,39 @@ float lerp(float v0, float v1, float t)
     return (1.0f - t) * v0 + t * v1;
 }
 
-Image *crossfade(Image *image1, Image *image2, float fade_factor)
+Image *crossfade(Image *image_from, Image *image_to, float fade_factor)
 {
     if (
-        image1->width != image2->width ||
-        image1->height != image2->height ||
-        image1->channels != image2->channels
+        image_from->width != image_to->width ||
+        image_from->height != image_to->height ||
+        image_from->channels != image_to->channels
     ) {
         printf("images must have the same dimensions and channels\n");
         return NULL;
     }
 
-    Image *out = (Image*)malloc(sizeof(Image));
+    Image *faded_image = (Image*)malloc(sizeof(Image));
 
-    if (out == NULL) {
+    if (faded_image == NULL) {
         printf("failed to allocate image\n");
         return NULL;
     }
 
-    out->width = image1->width;
-    out->height = image1->height;
-    out->channels = image1->channels;
-    out->nb_bytes = out->width * out->height * out->channels * sizeof(unsigned char);
-    out->data = (unsigned char*)malloc(out->nb_bytes);
+    copy_image_structure(image_from, faded_image);
 
-    for (int y = 0; y < out->height; ++y) {
-        for (int x = 0; x < out->width; ++x) {
-            for (int c = 0; c < out->channels; ++c) {
-                int loc = (y * out->width + x) * out->channels + c;
-                float pixel1 = image1->data[loc];
-                float pixel2 = image2->data[loc];
-                out->data[loc] = (unsigned char)lerp(pixel1, pixel2, fade_factor);
+    for (int y = 0; y < faded_image->height; ++y) {
+        for (int x = 0; x < faded_image->width; ++x) {
+            for (int c = 0; c < faded_image->channels; ++c) {
+                int loc = (y * faded_image->width + x) * faded_image->channels + c;
+
+                float pixel_from = image_from->data[loc];
+                float pixel_to = image_to->data[loc];
+                float faded_pixel = (unsigned char)lerp(pixel_from, pixel_to, fade_factor);
+
+                faded_image->data[loc] = faded_pixel;
             }
         }
     }
 
-    return out;
+    return faded_image;
 }
