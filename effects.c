@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "transitions.h"
+#include "effects.h"
 
 // From https://en.wikipedia.org/wiki/Linear_interpolation
 float lerp(float v0, float v1, float t)
